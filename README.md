@@ -58,7 +58,32 @@ You can list all authorized array for this call.
 
 Ex: `providers: ['youtube','dailymotion','soundcloud']`
 
-##### onError : Function
+##### beforeEmbed : Function(Array[DOMElement])
+
+Can access and operate changes on the DOM Elements soon to be embedded.
+
+Needs to return an Array of DOMElement to embedded.
+
+Ex:
+```
+beforeEmbed: function(elements) {
+  elements.push($('<p>').html('OEmbed item'));
+  return elements;
+}
+```
+
+##### afterEmbed : Function(DOMElement)
+
+Can access and operate changes on the DOM Element container that have been embedded.
+
+Ex:
+```
+afterEmbed: function(container) {
+  $(container).prepend('<h1>OEmbed item</h1>');
+}
+```
+
+##### onError : Function(Object)
 
 Define the expected behaviour when encountering an error.
 

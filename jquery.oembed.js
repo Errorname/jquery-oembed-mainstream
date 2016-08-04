@@ -12,6 +12,12 @@
 
 	var defaults = {
 		providers: '*',
+		beforeEmbed: function(embedCode) {
+			return embedCode;
+		},
+		afterEmbed: function(container) {
+			console.log('OEmbed succeeded!');
+		},
 		onError: function(e) {
 			console.log('OEmbed error:');
 			console.log(e);
@@ -44,12 +50,14 @@
 				if (provider) {
 
 					provider.getEmbedCode(resourceURL, settings, function(embedCode) {
-			
-						$('<div>')
-							.addClass('oembed-container')
-							.append(embedCode)
-							.insertAfter(container);
-						container.remove();
+
+						var new_embedCode = settings.beforeEmbed($(embedCode));
+
+						var new_container = provider.embed(container, new_embedCode);
+
+						settings.afterEmbed(new_container);
+
+						return new_container;
 
 					});
 
@@ -61,7 +69,7 @@
 				settings.onError({type: 'URL not found', message: 'The URL could not be found'});
 			}
 
-			//return container;
+			return container;
 		});
 	};
 
@@ -188,3 +196,13 @@ $.fn.oembed.OEmbedProvider.prototype.getCode = function(data) {
 	}
 
 };
+
+$.fn.oembed.OEmbedProvider.prototype.embed = function(container, embedCode) {
+	var new_container = $('<div>').addClass('oembed-container');
+
+	new_container.append(embedCode).insertAfter(container);
+
+	container.remove();
+
+	return new_container.get(0);
+}
