@@ -60,7 +60,15 @@ You can list all authorized array for this call.
 providers: ['youtube','dailymotion','soundcloud']
 ```
 
-##### Code Builder : Function(oembedData)
+##### classContainer : String
+
+This class will be associated to the <div> container of the embedded element.
+
+```
+classContainer: 'custom-container'
+```
+
+##### codeBuilder : Function(oembedData)
 
 This function is used to construct a custom DOM Element based on the oEmbed data.
 

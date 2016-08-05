@@ -12,6 +12,8 @@
 
 	var defaults = {
 		providers: '*',
+		classContainer: 'oembed-container',
+		codeBuilder: null,
 		beforeEmbed: function(embedCode) {
 			return embedCode;
 		},
@@ -21,7 +23,7 @@
 		onError: function(e) {
 			console.log('OEmbed error:');
 			console.log(e);
-		}
+		},
 	};
 
 	$.fn.oembed = function () {
@@ -53,7 +55,7 @@
 
 						var new_embedCode = settings.beforeEmbed($(embedCode));
 
-						var new_container = provider.embed(container, new_embedCode);
+						var new_container = provider.embed(container, new_embedCode, settings);
 
 						settings.afterEmbed(new_container);
 
@@ -199,8 +201,8 @@ $.fn.oembed.OEmbedProvider.prototype.getCode = function(data,settings) {
 
 };
 
-$.fn.oembed.OEmbedProvider.prototype.embed = function(container, embedCode) {
-	var new_container = $('<div>').addClass('oembed-container');
+$.fn.oembed.OEmbedProvider.prototype.embed = function(container, embedCode, settings) {
+	var new_container = $('<div>').addClass(settings.classContainer);
 
 	new_container.append(embedCode).insertAfter(container);
 
