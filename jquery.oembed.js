@@ -38,7 +38,7 @@
 
 		var settings = $.extend(true, {}, $.fn.oembed.defaults, options);
 
-		this.ret = this.each(function() {
+		return this.each(function() {
 
 			var container = $(this);
 			var resourceURL = (url && (!url.indexOf('http://') || !url.indexOf('https://'))) ? url : container.attr("href");
@@ -84,7 +84,7 @@
 			providerList = providers;
 
 		for (key in providerList) {
-			var provider = $.fn.oembed.providers[key] || $.fn.oembed.providers[providerList[key]];
+			var provider = $.fn.oembed.providers[key] || $.fn.oembed.providers[providerList[key].toLowerCase()];
 
 			for (i in provider.urls) {
 				var regExp = new RegExp(provider.urls[i], 'i');
