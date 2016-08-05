@@ -153,7 +153,7 @@ $.fn.oembed.OEmbedProvider.prototype.getEmbedCode = function(resourceURL, settin
 			success: function(data) {
 
 				if (data.query.count > 0) {
-					callback(self.getCode(self.yql(data)));
+					callback(self.getCode(self.yql(data),settings));
 				} else {
 					settings.onError({type:'yql null', message:'YQL request return an empty result'});
 				}
@@ -171,7 +171,7 @@ $.fn.oembed.OEmbedProvider.prototype.getEmbedCode = function(resourceURL, settin
 			dataType: 'json',
 			success: function(data) {
 
-				callback(self.getCode(data));
+				callback(self.getCode(data,settings));
 
 			},
 			error: function(e) {
@@ -182,9 +182,11 @@ $.fn.oembed.OEmbedProvider.prototype.getEmbedCode = function(resourceURL, settin
 	}
 };
 
-$.fn.oembed.OEmbedProvider.prototype.getCode = function(data) {
+$.fn.oembed.OEmbedProvider.prototype.getCode = function(data,settings) {
 
-	if ($.isFunction(this.codeBuilder))
+	if ($.isFunction(settings.codeBuilder)) {
+		return settings.codeBuilder(data);
+	} else if ($.isFunction(this.codeBuilder))
 		return this.codeBuilder(data);
 	else {
 

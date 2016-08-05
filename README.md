@@ -60,6 +60,18 @@ You can list all authorized array for this call.
 providers: ['youtube','dailymotion','soundcloud']
 ```
 
+##### Code Builder : Function(oembedData)
+
+This function is used to construct a custom DOM Element based on the oEmbed data.
+
+Note: If a `codeBuilder` option is defined with the associated provider, this function will be used over the one from the provider.
+
+```
+codeBuilder: function(oembedData) {
+  return $('<img>').attr('src',data.url).attr('alt',data.title);
+}
+```
+
 ##### beforeEmbed : Function(Array[DOMElement])
 
 Can access and operate changes on the DOM Elements soon to be embedded.
