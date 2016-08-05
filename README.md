@@ -34,7 +34,12 @@ Note: Read the documentation for more explanation on how to call `.oembed()`
 Documentation
 -------------
 
-### A) Calling the oEmbed function
+1. [Calling the oEmbed function](#1-calling-the-oembed-function)
+2. [OEmbed settings](#2-oembed-settings)
+3. [Adding a provider](#3-adding-a-provider)
+4. [Provider settings](#4-provider-settings)
+
+### 1) Calling the oEmbed function
 
 ```html
 <a class="oembed" href="https://www.flickr.com/photos/sohailkarmani/24048210319"></a>
@@ -49,7 +54,7 @@ Documentation
 
 ===
 
-### B) OEmbed Settings
+### 2) OEmbed settings
 
 ```js
 $('a.oembed').oembed({
@@ -146,7 +151,7 @@ $('a.oembed').oembed({
 
 ===
 
-### C) Adding a provider
+### 3) Adding a provider
 
 To add a provider, you can do the following:
 ```js
@@ -167,7 +172,7 @@ $.fn.oembed.providers['soundcloud'] = new $.fn.oembed.OEmbedProvider({
 
 ===
 
-### D) Provider settings
+### 4) Provider settings
 
 ##### Name : String
 
