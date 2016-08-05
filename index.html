@@ -20,6 +20,10 @@
 		<script src="providers.oembed.js"></script>
 		<script>
 			$('a.oembed').oembed({
+				beforeEmbed: function(data) {
+					console.log(data);
+					return data;
+				}
 			});
 		</script>
 	</body>
