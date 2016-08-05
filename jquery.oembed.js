@@ -184,14 +184,14 @@ $.fn.oembed.OEmbedProvider.prototype.getEmbedCode = function(resourceURL, settin
 
 $.fn.oembed.OEmbedProvider.prototype.getCode = function(data) {
 
-	if ($.isFunction(this.build_code))
-		this.build_code(data);
+	if ($.isFunction(this.codeBuilder))
+		return this.codeBuilder(data);
 	else {
 
 		if (data.html) {
 			return data.html;
 		} else {
-				settings.onError({type:'unknown instructions', message:"The script is unable to know what to do with the returned data"});
+			settings.onError({type:'unknown instructions', message:"The script is unable to know what to do with the returned data"});
 		}
 	}
 

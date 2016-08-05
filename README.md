@@ -56,7 +56,9 @@ Use given settings. Use given url.
 
 You can list all authorized array for this call.
 
-Ex: `providers: ['youtube','dailymotion','soundcloud']`
+```
+providers: ['youtube','dailymotion','soundcloud']
+```
 
 ##### beforeEmbed : Function(Array[DOMElement])
 
@@ -64,7 +66,6 @@ Can access and operate changes on the DOM Elements soon to be embedded.
 
 Needs to return an Array of DOMElement to embedded.
 
-Ex:
 ```
 beforeEmbed: function(elements) {
   elements.push($('<p>').html('OEmbed item'));
@@ -76,7 +77,6 @@ beforeEmbed: function(elements) {
 
 Can access and operate changes on the DOM Element container that have been embedded.
 
-Ex:
 ```
 afterEmbed: function(container) {
   $(container).prepend('<h1>OEmbed item</h1>');
@@ -87,7 +87,6 @@ afterEmbed: function(container) {
 
 Define the expected behaviour when encountering an error.
 
-Ex:
 ```
 onError: function(error) {
   console.log('An error have been found: '+error.type);
@@ -117,19 +116,22 @@ To add a provider, you can do the following:
 
 The name of the provider
 
-Ex: `name: 'youtube'`
+```
+name: 'youtube'
+```
 
 ##### Type : String
 
 The oEmbed type of the resource (Photo, Video, Link or Rich)
 
-Ex: `type: 'video'`
+```
+type: 'video'
+```
 
 ##### URLs : Array(String)
 
 The URL regex schemes to link an URL to a provider
 
-Ex:
 ```
 urls: [
   "youtube\\.com/watch.+v=[\\w-]+&?",
@@ -142,24 +144,44 @@ urls: [
 
 The oEmbed API endpoint of the provider
 
-Ex: `api: "www.youtube.com/oembed"`
+```
+api: "www.youtube.com/oembed"
+```
 
 ##### Data Type : String
 
 Sometime, the ajax request return a CORS error. You can add a jsonp data type to perform the request.
 
-Ex: `dataType: 'jsonp'`
+```
+dataType: 'jsonp'
+```
 
 ##### Callback Parameter : String
 
 Some providers need a specific callback function name.
 
-Ex: `callbackParameter: 'jsoncallback'`
+```
+callbackParameter: 'jsoncallback'
+```
 
-##### YQL : Function
+##### Code Builder : Function(oembedData)
+
+This function is used to construct a custom DOM Element based on the oEmbed data.
+
+Note: If a `codeBuilder` option is present at the call of `.oembed()`, the function from options will be used.
+
+```
+codeBuilder: function(oembedData) {
+  return $('<img>').attr('src',data.url).attr('alt',data.title);
+}
+```
+
+##### YQL : Function(oembedData)
 
 Sometime, a provider will not allow a jsonp request. Therefore, you need to use YQL to perform the request.
 
 The function is use to extract the oEmbed data from the YQL response data.
 
-Ex: `yql: (data) => {return data.query.results.json}`
+```
+yql: (data) => {return data.query.results.json}
+```
