@@ -1,7 +1,7 @@
 /*!
  * jQuery oEmbed plugin with mainstream providers
  *
- * Copyright (c) 2016 Thibaud Courtoison
+ * Copyright (c) 2017 Thibaud Courtoison
  * Licensed under MIT License
  *
  * Original Author: Richard Chamorro
@@ -13,11 +13,12 @@
 	var defaults = {
 		providers: '*',
 		classContainer: 'oembed-container',
+		removeOrigin: true,
 		codeBuilder: null,
-		beforeEmbed: function(embedCode) {
+		beforeEmbed: function(embedData, embedCode, provider) {
 			return embedCode;
 		},
-		afterEmbed: function(container) {
+		afterEmbed: function(embedData, container, provider) {
 			console.log('OEmbed succeeded!');
 		},
 		onError: function(e) {
@@ -51,13 +52,13 @@
 
 				if (provider) {
 
-					provider.getEmbedCode(resourceURL, settings, function(embedCode) {
+					provider.getEmbedCode(resourceURL, settings, function(embedData, embedCode) {
 
-						var new_embedCode = settings.beforeEmbed($(embedCode));
+						var new_embedCode = settings.beforeEmbed(embedData, $(embedCode), provider);
 
 						var new_container = provider.embed(container, new_embedCode, settings);
 
-						settings.afterEmbed(new_container);
+						settings.afterEmbed(embedData, new_container, provider);
 
 						return new_container;
 
@@ -139,14 +140,14 @@ $.fn.oembed.OEmbedProvider.prototype.getRequestUrl = function(resourceURL) {
 };
 
 $.fn.oembed.OEmbedProvider.prototype.getEmbedCode = function(resourceURL, settings, callback) {
-	
+
 	var requestURL = this.getRequestUrl(resourceURL);
 	var self = this;
 
 	if (this.yql) {
 
 		$.ajax({
-			url: 'http://query.yahooapis.com/v1/public/yql',
+			url: 'https://query.yahooapis.com/v1/public/yql',
 			data: {
 				q: "select * from json where url ='"+requestURL+"'",
 				format: "json"
@@ -155,7 +156,7 @@ $.fn.oembed.OEmbedProvider.prototype.getEmbedCode = function(resourceURL, settin
 			success: function(data) {
 
 				if (data.query.count > 0) {
-					callback(self.getCode(self.yql(data),settings));
+					callback(self.yql(data), self.getCode(self.yql(data),settings));
 				} else {
 					settings.onError({type:'yql null', message:'YQL request return an empty result'});
 				}
@@ -173,7 +174,7 @@ $.fn.oembed.OEmbedProvider.prototype.getEmbedCode = function(resourceURL, settin
 			dataType: 'json',
 			success: function(data) {
 
-				callback(self.getCode(data,settings));
+				callback(data, self.getCode(data,settings));
 
 			},
 			error: function(e) {
@@ -206,7 +207,20 @@ $.fn.oembed.OEmbedProvider.prototype.embed = function(container, embedCode, sett
 
 	new_container.append(embedCode).insertAfter(container);
 
-	container.remove();
+	if (settings.removeOrigin) {
+		container.remove();
+	}
 
 	return new_container.get(0);
 }
+
+// Remove "_" from jsonp callback to fix error when providers don't like them in function name
+var nonce = jQuery.now();
+jQuery.ajaxSetup( {
+	jsonp: "callback",
+	jsonpCallback: function() {
+		var callback = /*oldCallbacks.pop() ||*/ ( jQuery.expando /*+ "_"*/ + ( nonce++ ) ) + 'fix';
+		this[ callback ] = true;
+		return callback;
+	}
+} );

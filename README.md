@@ -2,6 +2,8 @@
 
 Use oEmbed data with jQuery - Rework of https://github.com/nfl/jquery-oembed-all
 
+DEMO: https://errorna.me/tools/jquery-oembed
+
 Instead of providing an exhaustive list of all oEmbed providers, this jQuery plugin lets you configure the providers that you need.
 
 If you wish, you can find a list of mainstream providers in the file `providers.oembed.js`
@@ -59,15 +61,16 @@ Documentation
 ```js
 $('a.oembed').oembed({
 	providers: '*', // List authorized providers
-	classContainer: 'oembed-container', // classname of the container
-	codeBuilder: null, // function to build DOM Element from oEmbed data
-	beforeEmbed: function(elements) { // function to interact with the soon to be embedded DOM Elements
+	classContainer: 'oembed-container', // Classname of the container
+	removeOrigin: true, // Origin (DOM Element from where you call oembed) will be removed after embedding
+	codeBuilder: null, // Function to build DOM Element from oEmbed data
+	beforeEmbed: function(data, elements, provider) { // Function to interact with the soon to be embedded DOM Elements
 		return elements;
 	},
-	afterEmbed: function() { // callback after successful embedding
+	afterEmbed: function(data, container, provider) { // Callback after successful embedding
 		console.log('OEmbed succeeded!');
 	},
-	onError: function(error) { // callback after reaching an error
+	onError: function(error) { // Callback after reaching an error
 		console.log('OEmbed error:');
 		console.log(error);
 	}
@@ -94,6 +97,16 @@ $('a.oembed').oembed({
 });
 ```
 
+##### removeOrigin : Boolean
+
+This boolean triggers or not the removal of the origin DOM Element from where you called the jQuery oembed function.
+
+```js
+$('a.oembed').oembed({
+	removeOrigin: true // This will remove 'a.oembed' from the DOM
+});
+```
+
 ##### codeBuilder : Function(Object)
 
 This function is used to construct a custom DOM Element based on the oEmbed data.
@@ -110,28 +123,28 @@ $('a.oembed').oembed({
 });
 ```
 
-##### beforeEmbed : Function(Array[DOMElement])
+##### beforeEmbed : Function(Object, Array[DOMElement], Object)
 
 Can access and operate changes on the DOM Elements soon to be embedded.
 
-This function must return a DOMElement or an Array of DOMElement to embedded.
+This function must return a DOMElement or an Array of DOMElement to embed.
 
 ```js
 $('a.oembed').oembed({
-	beforeEmbed: function(elements) {
+	beforeEmbed: function(embedData, elements, provider) {
 		elements.push($('<p>').html('OEmbed item'));
 		return elements;
 	}
 });
 ```
 
-##### afterEmbed : Function(DOMElement)
+##### afterEmbed : Function(Object, DOMElement, Object)
 
 Can access and operate changes on the DOM Element container that have been embedded.
 
 ```js
 $('a.oembed').oembed({
-	afterEmbed: function(container) {
+	afterEmbed: function(embedData, container, provider) {
 		$(container).prepend('<h1>OEmbed item</h1>');
 	}
 });
