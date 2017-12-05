@@ -40,6 +40,7 @@ Documentation
 2. [OEmbed settings](#2-oembed-settings)
 3. [Adding a provider](#3-adding-a-provider)
 4. [Provider settings](#4-provider-settings)
+5. [Proxy](#5-proxy)
 
 ### 1) Calling the oEmbed function
 
@@ -179,7 +180,8 @@ $.fn.oembed.providers['soundcloud'] = new $.fn.oembed.OEmbedProvider({
 	dataType: null, // data type for the ajax request
 	callbackParameter: null, // callback name for jsonp ajax requests
 	codeBuilder: null, // function to build a custom DOM Element from the oEmbed Data
-	yql: null // function to retrieve the object from a YQL Response Object
+	yql: null, // function to retrieve the object from a YQL Response Object
+	proxy: false // boolean to retrieve the object from a local proxy script
 });
 ```
 
@@ -217,7 +219,7 @@ This function is used to construct a custom DOM Element based on the oEmbed data
 
 This function must return an Object.
 
-Note: If a `codeBuilder` option is present at the call of `.oembed()`, the function from options will be used.
+Note: If a `codeBuilder` option is present at the call of `.oembed()`, the function from options will be used instead of this one.
 
 ```js
 codeBuilder: function(oembedData) {
@@ -237,4 +239,30 @@ This function must return an Object.
 yql: function(data) {
 	return data.query.results.json
 }
+```
+
+##### Proxy : Boolean
+
+YQL is a good way to proxy a request to retrieve data from a provider not allowing a jsonp request, or not having the CORS header. However, you are creating a dependency to the Yahoo service.
+
+Instead, you may opt to use a local proxy script (proxy.php).
+
+If you set the proxy attribute to true, this plugin will use the local proxy script instead of directly querying the provider or YQL.
+
+### 5) Proxy
+
+Some providers (e.g: Youtube) don't allow jsonp request or don't have CORS header. It forces us to use a proxy in these cases.
+
+One possibility is to use YQL, a Yahoo service to query the web. But it creates a dependency to a third-party service.
+
+Another possibility is to use a local proxy script using whatever language or framework you wish.
+
+The proxy must complete a really simple task. Using the GET attribute named "csurl", it must return the response when querying this url.
+
+You can find a PHP proxy script in this repository.
+
+To define the path to the proxy (default is "proxy.php"):
+
+```js
+$.fn.oembed.proxyPath = '/my/path/to/proxy';
 ```

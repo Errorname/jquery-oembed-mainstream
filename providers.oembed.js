@@ -9,7 +9,7 @@ $.fn.oembed.providers = {
 					urls: [
 						"dailymotion\\.com/.+"
 					],
-					api: "//www.dailymotion.com/services/oembed",
+					api: "www.dailymotion.com/services/oembed",
 					dataType: 'jsonp'
 				}),
 
@@ -19,7 +19,7 @@ $.fn.oembed.providers = {
 					urls: [
 						"flickr\\.com/photos/.+"
 					],
-					api: "//www.flickr.com/services/oembed",
+					api: "www.flickr.com/services/oembed",
 					dataType: 'jsonp',
 					callbackParameter: 'jsoncallback'
 				}),
@@ -30,7 +30,7 @@ $.fn.oembed.providers = {
 					urls: [
 						"imgur\\.com/gallery/.+"
 					],
-					api: "//api.imgur.com/oembed"
+					api: "api.imgur.com/oembed"
 				}),
 
 	'instagram': new $.fn.oembed.OEmbedProvider({
@@ -39,7 +39,7 @@ $.fn.oembed.providers = {
 					urls: [
 						"instagr\\.?am(\\.com)?/.+"
 					],
-					api: "//api.instagram.com/oembed",
+					api: "api.instagram.com/oembed",
 					dataType: 'jsonp'
 				}),
 
@@ -50,7 +50,7 @@ $.fn.oembed.providers = {
 						"soundcloud.com/.+",
 						"snd.sc/.+"
 					],
-					api: "//soundcloud.com/oembed"
+					api: "soundcloud.com/oembed"
 				}),
 
 	'spotify': new $.fn.oembed.OEmbedProvider({
@@ -59,7 +59,7 @@ $.fn.oembed.providers = {
 					urls: [
 						"open.spotify.com/(track|album|user)/"
 					],
-					api: "//embed.spotify.com/oembed/",
+					api: "embed.spotify.com/oembed/",
 					dataType: 'jsonp'
 				}),
 
@@ -72,7 +72,7 @@ $.fn.oembed.providers = {
 						"vimeo\.com\/groups\/.*\/videos\/.*",
 						"vimeo\.com\/.*"
 					],
-					api: "//vimeo.com/api/oembed.json"
+					api: "vimeo.com/api/oembed.json"
 				}),
 
 	'youtube': new $.fn.oembed.OEmbedProvider({
@@ -85,6 +85,7 @@ $.fn.oembed.providers = {
 					],
 					api: "www.youtube.com/oembed",
 					yql: (data) => {return data.query.results.json}
+					//proxy: true
 				}),
 
 };

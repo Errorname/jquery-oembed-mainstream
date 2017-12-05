@@ -10,6 +10,7 @@
 
 (function($) {
 
+	// Default oembed options
 	var defaults = {
 		providers: '*',
 		classContainer: 'oembed-container',
@@ -24,8 +25,11 @@
 		onError: function(e) {
 			console.log('OEmbed error:');
 			console.log(e);
-		},
+		}
 	};
+
+	// Default oembed proxy path ($.fn.oembed.proxyPath)
+	var proxyPath = 'proxy2.php';
 
 	$.fn.oembed = function () {
 
@@ -75,6 +79,8 @@
 			return container;
 		});
 	};
+
+	$.fn.oembed.proxyPath = proxyPath;
 
 	$.fn.oembed.defaults = defaults;
 
@@ -128,6 +134,10 @@ $.fn.oembed.OEmbedProvider.prototype.getRequestUrl = function(resourceURL) {
 
 	var url = this.api;
 
+	if (url.indexOf('://') == -1) {
+		url = 'https://'+url;
+	}
+
 	url += (url.indexOf("?") <= 0) ? "?" : "&";
 
 	url += "format="+this.format + "&url=" + escape(resourceURL);
@@ -144,7 +154,7 @@ $.fn.oembed.OEmbedProvider.prototype.getEmbedCode = function(resourceURL, settin
 	var requestURL = this.getRequestUrl(resourceURL);
 	var self = this;
 
-	if (this.yql) {
+	if (this.yql && !this.proxy) {
 
 		$.ajax({
 			url: 'https://query.yahooapis.com/v1/public/yql',
@@ -168,6 +178,10 @@ $.fn.oembed.OEmbedProvider.prototype.getEmbedCode = function(resourceURL, settin
 		});
 
 	} else {
+
+		if (this.proxy) {
+			requestURL = $.fn.oembed.proxyPath+'?csurl='+encodeURIComponent(requestURL);
+		}
 
 		$.ajax({
 			url: requestURL,
